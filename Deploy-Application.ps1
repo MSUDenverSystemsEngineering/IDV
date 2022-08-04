@@ -191,8 +191,26 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		Remove-Folder -Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Integrated Data Viewer 6.1" -ContinueOnError
-		Remove-Folder -Path "C:\Program Files\IDV_6.1" -ContinueOnError
+		If (Test-Path "$envProgramData\Microsoft\Windows\Start Menu\Programs\Integrated Data Viewer 6.1") {
+			Write-Log -Message "Deleting installation files..." -Source 'Uninstallation' -LogType 'CMTrace'
+			Get-ChildItem -Path "$envProgramData\Microsoft\Windows\Start Menu\Programs\Integrated Data Viewer 6.1" -Recurse | Remove-Item -force -recurse
+			Remove-Item "$envProgramData\Microsoft\Windows\Start Menu\Programs\Integrated Data Viewer 6.1" -Force
+		}
+		Else {
+			Write-Log -Message "IDV 6.1 installation files not detected." -Source 'Pre-Installation' -LogType 'CMTrace'
+		}
+		If (Test-Path "$envProgramFiles\IDV_6.1") {
+			Write-Log -Message "Deleting installation files..." -Source 'Uninstallation' -LogType 'CMTrace'
+			Get-ChildItem -Path "$envProgramFiles\IDV_6.1" -Recurse | Remove-Item -force -recurse
+			Remove-Item "$envProgramFiles\IDV_6.1" -Force
+		}
+		Else {
+			Write-Log -Message "IDV 6.1 installation files not detected." -Source 'Pre-Installation' -LogType 'CMTrace'
+		}
+
+		#Remove-Folder -Path "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Integrated Data Viewer 6.1" -ContinueOnError
+		#Remove-Folder -Path "C:\Program Files\IDV_6.1" -ContinueOnError
+
 
 		##*===============================================
 		##* POST-UNINSTALLATION
@@ -253,8 +271,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUNfvoqckiGXOZ+kToHM8bSREJ
-# ktOgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUJZMY32CzNOfG3lRX1IB6YDKy
+# XOKgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -354,13 +372,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFJBQkO91wqoAbIp9+KBM8Rat7XPNMA0GCSqGSIb3DQEBAQUABIIBgAO07u6n
-# lyEODGd9yKT3zCEbbktXIC8HzDh6Od59nfkGAFh2jzZOXSTGbFpNu5VwbFNC4fxA
-# K78a95Z2xfYQNye4dZgk6X3kw0PhAlR5hLhZvSYCM5jqF8jyEdCKUH58ugLbLCN1
-# GmdyfIhRXGsBe87WCgfq/jtVPF2UpM4x3a73tDFtr4MP4xxXo4m+79Zu0fnyzNMA
-# yVmPrEqZK/MISy5idgeV8G8GD4HnbvlS1tE5QwLM0rybowVt5Tup9vAp/jlWPB/g
-# +48sFPLx4pZ/j/KzFwo3HEjnhX3TBYvMTxwjhxa3WllfSNZz2EtzmLxVkZ4zZ/sO
-# PXOYPo0712lOdAdvV5rw8SbazIb1ASSXXzT4sP7GKwQWYay+nFLP8oWlkhYRTWbC
-# VkDXm4ZzbT7j2tBOK5jYIuW64RAP0egMmponkzmhS6FbcBurY10IH2Uvk4x56ijj
-# Von+PqVq842lx8y1bseesyE85BYZc9dVmWmV6t123Hz1gjmBwUw7Neb11g==
+# MRYEFERQRbVi/JfqAN3qSEg7L97xwkH0MA0GCSqGSIb3DQEBAQUABIIBgI4iKWHr
+# +uOvT6VbxbbJxhUrFKUi+s0WRtxtjfiZQ0l+RYTN9H1Os1Y2UoHtThJar62Zotj1
+# 3Vr/srp5wsvWqzkYhpUzaq8S0t/5SZdKLJ0LqIVCq8tXbUCBudBdOed4LTbV7uAL
+# S/39Lg329plm01O4yHAUB609wj/sKamDIUxHVcCjVR2LN4MsxXSIxbAff86zJJjH
+# rJehK8JBbqBM0VKg0g5bJzmitj4xVEkitgtuwQv57sCyecyliI+Lxqgixg6KhkD/
+# 7uDM522BGCNwJNcrzDb+LodiNq9MGLNGYiT+XOHSR2HH8iHHaQxXeXlrGORc6ZV/
+# YtWuaXQiGHHeRtwg+rQarsN9KG4vqwTMgB/d3HCE/ZfhjUBh/NiWE1gubhXmlIuM
+# U1v1oBNlgbb+oVYHOAV4nx8WoV2/dHOsbY0bEn9hHA5m96UQR0XBPdPxmWmqqrRg
+# X9V7Kxlu7zQeIWwSxJDmTZ2+Rfs8uTEq7PE2KQT2EqnfjSi2wHiDMvV93w==
 # SIG # End signature block
